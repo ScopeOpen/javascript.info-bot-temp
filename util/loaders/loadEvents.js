@@ -1,10 +1,17 @@
-const { MessageEmbed, Collection } = require("discord.js");
-const guildEvent = (event) => require(`../../events/${event}`);
+const fs = require('fs');
+const path = require('path');
 
-function events(client) {  
-  client.on("interactionCreate", (intEvent) => guildEvent("interactionCreate")(intEvent, client));
-  client.on("warn", (warningEvent) => console.log(warningEvent));
-  client.on("error", console.error);
-}
+console.log('hi')
 
-module.exports = { events };
+module.exports = client => {
+    console.log('hi')
+	fs.readdir(path.join(__dirname, '../../', 'events'), (_err, files) => {
+		files.forEach((file) => {
+			if (!file.endsWith('.js')) return;
+			const event = require(`../../events/${file}`);
+			const eventName = file.split('.')[0];
+			client.on(eventName, event.bind(null, client));
+			delete require.cache[require.resolve(`../../events/${file}`)];
+		});
+	});
+};

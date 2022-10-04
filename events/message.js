@@ -9,6 +9,7 @@ const devID = config.devID
 console.log('hey')
 
 client.on('MessageCreate', async (message) => {
+    console.log('it worked')
     if(message.author.bot) return;
     if(!message.content.startsWith(prefix)) return;
     
