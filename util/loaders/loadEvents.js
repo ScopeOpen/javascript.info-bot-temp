@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log('hi')
-
-module.exports = client => {
+module.exports = (client) => {
     console.log('hi')
 	fs.readdir(path.join(__dirname, '../../', 'events'), (_err, files) => {
 		files.forEach((file) => {
