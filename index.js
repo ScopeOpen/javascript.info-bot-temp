@@ -12,8 +12,9 @@
 */
 const config = require("./util/conf/botconfig.json");
 
-
-const { GatewayIntentBits, Client, Partials, Collection } = require("discord.js"),
+const { GatewayIntentBits, Client, Partials, Collection } = require(
+    "discord.js",
+  ),
   client = new Client({
     allowedMentions: {
       parse: ["roles", "everyone", "users"],
@@ -42,10 +43,10 @@ const { GatewayIntentBits, Client, Partials, Collection } = require("discord.js"
 client.commands = new Collection();
 client.aliases = new Collection();
 
-require('./util/loaders/loadCommands')
-require('./util/loaders/loadEvents')
+require("./util/loaders/loadCommands");
+require("./util/loaders/loadEvents");
 
 //const mongoose = require('mongoose');
 //mongoose.connect(config.mongoURL, { useUnifiedTopology: true, useNewUrlParser: true }).then(client.logger.log('READY', 'Bot has successfully connected to MongoDB!'));
 
-client.login(config.token)
+client.login(config.token);
