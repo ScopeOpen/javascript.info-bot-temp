@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js')
 const client = require('../index.js')
-const config = require('../conf/botconfig.json')
+const config = require('../util/conf/botconfig.json')
 const ms = require('ms')
 
 const prefix = config.prefix

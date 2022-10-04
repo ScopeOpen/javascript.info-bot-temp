@@ -1,5 +1,5 @@
-const client = require('../index');
-const config = require('../conf/botconfig.json');
+const client = require('../index.js')
+const config = require('../util/conf/botconfig.json');
 const statuses = config.statuses;
 //? const chalk = require('chalk');
 

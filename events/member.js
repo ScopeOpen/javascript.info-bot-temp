@@ -1,5 +1,6 @@
-const client = require('../index');
-const config = require('../conf/botconfig.json');
+const { Client } = require('discord.js');
+const client = require('../index.js')
+const config = require('../util/conf/botconfig.json');
 
 client.on('guildMemberAdd', async (member, guild) => {
     if(`${config.ServerBlacklisted}`.includes(member.id)) {

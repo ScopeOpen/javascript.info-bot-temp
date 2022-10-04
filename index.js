@@ -1,46 +1,51 @@
 /*
  * npm install discord.js@14.0.3
  * npm init
- * node .
+ * npm start
+ *
+ */
+
+/*
+  ! Slash Command Setup
+   const { REST } = require("@discordjs/rest");
+   const { Routes } = require("discord-api-types/v9");
 */
-
-const { readdirSync } = require("fs");
-const fs = require("fs");
-
-const { Client, Intents } = require('discord.js'),
-    config = require("./conf/botconfig.json"),
-    client = new Client({ allowedMentions: { parse: ["roles", "everyone", "users"], repliedUser: false }, partials: ["MESSAGE", "CHANNEL", "REACTION"], intents: Intents.all })
+const config = require("./util/conf/botconfig.json");
 
 
-/* 
-    * Possible Edits
-     We dont need as many intents, these are basically all of them and I just added them to prevent **intent errs**
+const { GatewayIntentBits, Client, Partials, Collection } = require("discord.js"),
+  client = new Client({
+    allowedMentions: {
+      parse: ["roles", "everyone", "users"],
+      repliedUser: false,
+    },
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
+    intents: [
+      GatewayIntentBits.MessageContent,
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildBans,
+      GatewayIntentBits.GuildIntegrations,
+      GatewayIntentBits.GuildWebhooks,
+      GatewayIntentBits.GuildInvites,
+      GatewayIntentBits.GuildVoiceStates,
+      GatewayIntentBits.GuildPresences,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildMessageTyping,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.DirectMessageReactions,
+      GatewayIntentBits.DirectMessageTyping,
+    ],
+  });
 
-    ! Slash Command Setup
-     const { REST } = require("@discordjs/rest");
-     const { Routes } = require("discord-api-types/v9");
+client.commands = new Collection();
+client.aliases = new Collection();
 
-    ? Possible Modules
-     @ ( ascii-table ) If we would like to have a clean startup logging this would be useful
-     @ ( chalk )
-     @ ( captcha-canvas ) I dont know if you want this but we could have a capthca verification system
+require(`./util/loaders/loadCommands`)(client);
+require(`./util/loaders/loadEvents`)(client);
 
-    ? Client Config Additions ( For HELP cmd )
-     client.commands = new Collection(); 
-     client.aliases = new Collection(); 
-*/ 
+//const mongoose = require('mongoose');
+//mongoose.connect(config.mongoURL, { useUnifiedTopology: true, useNewUrlParser: true }).then(client.logger.log('READY', 'Bot has successfully connected to MongoDB!'));
 
-
-
-module.exports = client;
-client.botconfig = config;
-client.logger = new loggerHandler();
-client.embed = new MessageEmbed();
-
-client.categories = fs.readdirSync("./commands/");
-
-["command"].forEach(handler => { 
-  require(`./handlers/${handler}`)(client);
-});
-
-client.login(config.token);
+client.login(config.token)
