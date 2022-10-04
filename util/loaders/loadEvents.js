@@ -1,15 +1,10 @@
-const { readdirSync } = require('fs');  
-module.exports = (client) => {    
-	readdirSync('./events/').forEach((file) => {
-		const events = readdirSync('./events/').filter((file) => file.endsWith('.js'));
-        
-		for (let file of events) {
-			let pull = require(`../events/${file}`);
-			if (pull.name) {
-				client.events.set(pull.name, pull);
-			} else {
-				continue;
-			}
-		}
-	});
-};
+const { MessageEmbed, Collection } = require("discord.js");
+const guildEvent = (event) => require(`../../events/${event}`);
+
+function events(client) {  
+  client.on("interactionCreate", (intEvent) => guildEvent("interactionCreate")(intEvent, client));
+  client.on("warn", (warningEvent) => console.log(warningEvent));
+  client.on("error", console.error);
+}
+
+module.exports = { events };

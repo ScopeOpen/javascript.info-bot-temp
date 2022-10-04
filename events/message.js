@@ -6,6 +6,8 @@ const ms = require('ms')
 const prefix = config.prefix
 const devID = config.devID
 
+console.log('hey')
+
 client.on('MessageCreate', async (message) => {
     if(message.author.bot) return;
     if(!message.content.startsWith(prefix)) return;
