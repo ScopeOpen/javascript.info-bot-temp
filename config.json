@@ -1,6 +1,7 @@
 {
     "Authorization": {
-        "Token": "MTAyNjY3NTE4Mjk5MzE2MjMwMg.GbrayE.CCjyMXJChS1o4VIdEHKFFRW6CO2dKJ_ZEnFn5U"
+        "Token": "MTAyNjY3NTE4Mjk5MzE2MjMwMg.GbrayE.CCjyMXJChS1o4VIdEHKFFRW6CO2dKJ_ZEnFn5U",
+        "Mongoose": "mongodb+srv://javascriptINFO:PUakFmXLC01ohGYo@cluster0.gdzcnsq.mongodb.net/dev"
     },
     "Configuration": {
         "Prefix": ".",
@@ -10,7 +11,8 @@
             "331561175617765377"
         ],
         "Messages": {
-            "COOLDOWN": "Slow down and wait <duration>"
+            "COOLDOWN": "Slow down and wait <duration>",
+            "STARTUP": "Bot is up and running."
         }
     }
 }
