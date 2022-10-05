@@ -1,13 +1,44 @@
 const { Collection } = require("discord.js");
+const config = require("../../config.json");
+const	client = require("../../index.js");
 const ms = require("ms");
 
-const config = require("../../config.json"), 
-	client = require("../../index.js");
-
-const prefix = config.Configuration.Prefix;
-const cooldown = new Collection();
+const cooldownMap = new Map();
+const Embed = config.Embed
 
 client.on("messageCreate", async (message) => {
+	const prefix = config.Configuration.Prefix
+	const args = message.content.slice(prefix.length).trim().split(/ +/g);
+	const cmd = args.shift().toLowerCase();
+
+});
+
+module.exports = {
+	getComandUsage() {
+
+	}
+
+};
+
+function applyCooldown(memberid, cmd) {
+	const key = cmd.name + '-' + memberid
+	cooldownMap.set(key, Date.now());
+}
+
+function checkRemaning(memberid, cmd) {
+	const key = cmd.name + '-' + memberid
+	if(cooldownMap.has(key)) {
+		const remaining = (cooldownMap.get(key) - Date.now()) * 0.01;
+		if(remaining > cmd.cooldown) {
+			cooldownMap.delete(key);
+			return;
+		}
+		return cmd.cooldown - remaining;
+	}
+	return;
+}
+
+/*
 	if (message.content.bot) return;
   	if (message.channel.type !== 0) return;
   	if (!message.content.startsWith(prefix)) return;
@@ -34,7 +65,6 @@ client.on("messageCreate", async (message) => {
 				}
 			})
 		}
-
     		if (command.cooldown) {
       		if (cooldown.has(`${command.name}-${message.author.id}`)) { message.channel.send({ content: config.Configuration.Messages.COOLDOWN.replace( "<duration>", ms( cooldown.get(`${command.name}-${message.author.id}`) - Date.now(), { long: true } ) ), }); return; }
       
@@ -59,5 +89,4 @@ client.on("messageCreate", async (message) => {
 		
 		
   	}
-});
-
+*/

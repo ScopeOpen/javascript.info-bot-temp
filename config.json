@@ -13,6 +13,9 @@
         "Messages": {
             "COOLDOWN": "Slow down and wait <duration>",
             "STARTUP": "Bot is up and running."
+        },
+        "Embed": {
+            "COLOR": "#fffff"
         }
     }
 }
