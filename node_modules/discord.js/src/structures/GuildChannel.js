@@ -14,6 +14,7 @@ const PermissionsBitField = require('../util/PermissionsBitField');
  * - {@link CategoryChannel}
  * - {@link NewsChannel}
  * - {@link StageChannel}
+ * - {@link ForumChannel}
  * @extends {BaseChannel}
  * @abstract
  */
@@ -151,7 +152,8 @@ class GuildChannel extends BaseChannel {
   /**
    * Gets the overall set of permissions for a member or role in this channel, taking into account channel overwrites.
    * @param {GuildMemberResolvable|RoleResolvable} memberOrRole The member or role to obtain the overall permissions for
-   * @param {boolean} [checkAdmin=true] Whether having `ADMINISTRATOR` will return all permissions
+   * @param {boolean} [checkAdmin=true] Whether having the {@link PermissionFlagsBits.Administrator} permission
+   * will return all permissions
    * @returns {?Readonly<PermissionsBitField>}
    */
   permissionsFor(memberOrRole, checkAdmin = true) {
@@ -190,7 +192,8 @@ class GuildChannel extends BaseChannel {
   /**
    * Gets the overall set of permissions for a member in this channel, taking into account channel overwrites.
    * @param {GuildMember} member The member to obtain the overall permissions for
-   * @param {boolean} checkAdmin=true Whether having `ADMINISTRATOR` will return all permissions
+   * @param {boolean} checkAdmin Whether having the {@link PermissionFlagsBits.Administrator} permission
+   * will return all permissions
    * @returns {Readonly<PermissionsBitField>}
    * @private
    */
@@ -221,7 +224,8 @@ class GuildChannel extends BaseChannel {
   /**
    * Gets the overall set of permissions for a role in this channel, taking into account channel overwrites.
    * @param {Role} role The role to obtain the overall permissions for
-   * @param {boolean} checkAdmin Whether having `ADMINISTRATOR` will return all permissions
+   * @param {boolean} checkAdmin Whether having the {@link PermissionFlagsBits.Administrator} permission
+   * will return all permissions
    * @returns {Readonly<PermissionsBitField>}
    * @private
    */

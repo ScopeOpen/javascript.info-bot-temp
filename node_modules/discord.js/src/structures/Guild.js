@@ -216,6 +216,8 @@ class Guild extends AnonymousGuild {
        * @type {?boolean}
        */
       this.widgetEnabled = data.widget_enabled;
+    } else {
+      this.widgetEnabled ??= null;
     }
 
     if ('widget_channel_id' in data) {
@@ -224,6 +226,8 @@ class Guild extends AnonymousGuild {
        * @type {?string}
        */
       this.widgetChannelId = data.widget_channel_id;
+    } else {
+      this.widgetChannelId ??= null;
     }
 
     if ('explicit_content_filter' in data) {
@@ -285,6 +289,16 @@ class Guild extends AnonymousGuild {
       this.maximumPresences = data.max_presences;
     } else {
       this.maximumPresences ??= null;
+    }
+
+    if ('max_video_channel_users' in data) {
+      /**
+       * The maximum amount of users allowed in a video channel.
+       * @type {?number}
+       */
+      this.maxVideoChannelUsers = data.max_video_channel_users;
+    } else {
+      this.maxVideoChannelUsers ??= null;
     }
 
     if ('approximate_member_count' in data) {
@@ -479,7 +493,7 @@ class Guild extends AnonymousGuild {
 
   /**
    * Widget channel for this guild
-   * @type {?TextChannel}
+   * @type {?(TextChannel|NewsChannel|VoiceChannel|StageChannel|ForumChannel)}
    * @readonly
    */
   get widgetChannel() {
@@ -550,7 +564,7 @@ class Guild extends AnonymousGuild {
    * @returns {Promise<Collection<string, GuildTemplate>>}
    */
   async fetchTemplates() {
-    const templates = await this.client.rest.get(Routes.guildTemplate(this.id));
+    const templates = await this.client.rest.get(Routes.guildTemplates(this.id));
     return templates.reduce((col, data) => col.set(data.code, new GuildTemplate(this.client, data)), new Collection());
   }
 
@@ -646,14 +660,15 @@ class Guild extends AnonymousGuild {
    * Data for the Guild Widget Settings object
    * @typedef {Object} GuildWidgetSettings
    * @property {boolean} enabled Whether the widget is enabled
-   * @property {?GuildChannel} channel The widget invite channel
+   * @property {?(TextChannel|NewsChannel|VoiceChannel|StageChannel|ForumChannel)} channel The widget invite channel
    */
 
   /**
    * The Guild Widget Settings object
    * @typedef {Object} GuildWidgetSettingsData
    * @property {boolean} enabled Whether the widget is enabled
-   * @property {?GuildChannelResolvable} channel The widget invite channel
+   * @property {?(TextChannel|NewsChannel|VoiceChannel|StageChannel|ForumChannel|Snowflake)} channel
+   * The widget invite channel
    */
 
   /**
@@ -713,7 +728,6 @@ class Guild extends AnonymousGuild {
     return new GuildAuditLogs(this, data);
   }
 
-  /* eslint-disable max-len */
   /**
    * The data for editing a guild.
    * @typedef {Object} GuildEditData
@@ -818,7 +832,7 @@ class Guild extends AnonymousGuild {
    * Welcome channel data
    * @typedef {Object} WelcomeChannelData
    * @property {string} description The description to show for this welcome channel
-   * @property {GuildTextChannelResolvable} channel The channel to link for this welcome channel
+   * @property {TextChannel|NewsChannel|ForumChannel|Snowflake} channel The channel to link for this welcome channel
    * @property {EmojiIdentifierResolvable} [emoji] The emoji to display for this welcome channel
    */
 
@@ -1264,7 +1278,7 @@ class Guild extends AnonymousGuild {
    */
   _sortedChannels(channel) {
     const category = channel.type === ChannelType.GuildCategory;
-    const channelTypes = [ChannelType.GuildText, ChannelType.GuildNews];
+    const channelTypes = [ChannelType.GuildText, ChannelType.GuildAnnouncement];
     return discordSort(
       this.channels.cache.filter(
         c =>

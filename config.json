@@ -1,0 +1,16 @@
+{
+    "Authorization": {
+        "Token": "MTAyNjY3NTE4Mjk5MzE2MjMwMg.GbrayE.CCjyMXJChS1o4VIdEHKFFRW6CO2dKJ_ZEnFn5U"
+    },
+    "Configuration": {
+        "Prefix": ".",
+        "DevID": [
+            "890442340370632714",
+            "208091532648120320",
+            "331561175617765377"
+        ],
+        "Messages": {
+            "COOLDOWN": "Slow down and wait <duration>"
+        }
+    }
+}
