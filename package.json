@@ -1,6 +1,8 @@
 {
+  "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jasmine --config=jasmine.json"
   },
   "dependencies": {
     "@discordjs/rest": "^1.2.0",
@@ -10,5 +12,8 @@
     "discord.js": "^14.5.0",
     "dotenv": "^16.0.3",
     "ms": "^2.1.3"
+  },
+  "devDependencies": {
+    "jasmine": "^4.4.0"
   }
 }
