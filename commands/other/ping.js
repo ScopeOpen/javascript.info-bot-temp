@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   NAME: "ping",
   DESCRIPTION: "IDK",
   CATEGORY: "FUN",
