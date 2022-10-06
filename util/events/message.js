@@ -10,7 +10,23 @@ client.on("messageCreate", async (message) => {
 	const prefix = config.Configuration.Prefix
 	const args = message.content.slice(prefix.length).trim().split(/ +/g);
 	const cmd = args.shift().toLowerCase();
+	const cmdConf = cmd.SETTINGS
 
+	if(!message.channel.permissionsFor(message.guild.members.me).has('SendMessages')) return; 
+	if(cmdConf.ENABLED === false) return;
+
+
+    // Check if command is ran by owner
+	if(cmd.CATEGORY === "OWNER" && !cmdConf.OWNERIDS.includes(message.author.id)) { 
+	    return message.reply({ content: config.Configuration.Messages.OWNERONLY }) 
+	} 
+
+    // Check is user has permissions
+    if(cmd.USERPERMS && cmd.USERPERMS?.length > 0) {
+        if(!message.channel.permissionsFor(message.member).has(cmd.USERPERMS)){
+            
+        }
+    }
 });
 
 module.exports = {
@@ -21,19 +37,19 @@ module.exports = {
 };
 
 function applyCooldown(memberid, cmd) {
-	const key = cmd.name + '-' + memberid
+	const key = cmd.NAME + '-' + memberid
 	cooldownMap.set(key, Date.now());
 }
 
 function checkRemaning(memberid, cmd) {
-	const key = cmd.name + '-' + memberid
+	const key = cmd.NAME + '-' + memberid
 	if(cooldownMap.has(key)) {
 		const remaining = (cooldownMap.get(key) - Date.now()) * 0.01;
 		if(remaining > cmd.cooldown) {
 			cooldownMap.delete(key);
 			return;
 		}
-		return cmd.cooldown - remaining;
+		return cmd.SETTINGS.COOLDOWN - remaining;
 	}
 	return;
 }

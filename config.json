@@ -12,7 +12,8 @@
         ],
         "Messages": {
             "COOLDOWN": "Slow down and wait <duration>",
-            "STARTUP": "Bot is up and running."
+            "STARTUP": "Bot is up and running.",
+            "OWNERONLY": "Sorry this command is only for owners"
         },
         "Embed": {
             "COLOR": "#fffff"
