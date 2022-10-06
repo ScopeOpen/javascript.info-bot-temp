@@ -57,7 +57,7 @@ client.on("messageCreate", async (message) => {
     } catch(e) {
         message.reply({ content: config.Configuration.Messages.FAILEDCMD })
     } finally {
-        if (cmd.cooldown > 0) applyCooldown(message.author.id, cmd);
+        if (cmd.COOLDOWN > 0) applyCooldown(message.author.id, cmd);
     }
 });
 
