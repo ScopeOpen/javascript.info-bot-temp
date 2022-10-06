@@ -75,10 +75,14 @@ export default client;
 
 // By this point, I don't think I need to explain why this is an absolute mess.
 
+async function _import(path) {
+  return await import(path);
+}
+
 for (const entry of getFileTree("./handlers")) {
   if (entry.isFile) {
     const { handler } = await import(entry.path);
-    handler?.({ getFileTree });
+    handler?.(client, { _import, getFileTree });
   }
 }
 
