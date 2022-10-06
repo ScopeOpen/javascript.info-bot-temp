@@ -1,13 +1,8 @@
 // Imports: Node
-const fs = require("fs");
+import { readdirSync as readDirSync } from "fs";
 
 // Imports: Discord.js
-const {
-  Client,
-  Collection,
-  GatewayIntentBits,
-  Partials,
-} = require("discord.js");
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 
 // WARNING
 // This is an import with hidden side effects. To understand what this does
@@ -23,10 +18,12 @@ const {
 // DANGER: Do NOT `git add` or `git push` this file to the repository (local or
 //         remote). The file name has been included in the ".gitignore" file
 //         to keep you from doing so. Do not share your secret key/tokens.
-require("dotenv").config({ path: "./.env" });
+//require("dotenv").config({ path: "./.env" });
 
 // Imports: Local
-const config = require("./config.json");
+import { getFileTree } from "./helpers/get-file-tree.mjs";
+import { readJSONFromFile } from "./helpers/read-json-from-file.mjs";
+const { prefix } = readJSONFromFile("./config.json");
 
 const client = new Client({
   intents: [
@@ -66,7 +63,7 @@ client.aliases = new Collection();
 client.slashCommands = new Collection();
 client.buttons = new Collection();
 client.all = new Collection();
-client.prefix = config.prefix;
+client.prefix = prefix;
 
 // WARNING
 // This looks like a nasty setup for cirucluar dependency. Not only would
@@ -74,11 +71,15 @@ client.prefix = config.prefix;
 // client is needed, but they'll also have to follow the import chain back to
 // figure out why we are importing the main file in other files to begin with.
 // Do not do this.
-module.exports = client;
+export default client;
 
 // By this point, I don't think I need to explain why this is an absolute mess.
-fs.readdirSync("./handlers").forEach((handler) => {
-  require(`./handlers/${handler}`)(client);
-});
 
-client.login(process.env.TOKEN);
+for (const entry of getFileTree("./handlers")) {
+  if (entry.isFile) {
+    const { handler } = await import(entry.path);
+    handler?.({ getFileTree });
+  }
+}
+
+//client.login(process.env.TOKEN);

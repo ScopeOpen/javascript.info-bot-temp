@@ -1,18 +1,23 @@
-const fs = require('fs');
-const chalk = require('chalk')
-const AsciiTable = require('ascii-table')
+import fs from "node:fs";
+import chalk from "chalk";
 
-var table = new AsciiTable()
-table.setHeading('Events', 'Loaded').setBorder('║', '=', '.')
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
 
-module.exports = (client) => {
-    fs.readdirSync('./util/events/').filter((file) => file.endsWith('.js')).forEach((event) => {
-        try {
-      	    require(`../util/events/${event}`);
-            table.addRow(event, '✅')
-        } catch(e) {
-            table.addRow(event, '❌')
-        }
-    })
-	console.log(chalk.cyan(table.toString()))
-};
+const AsciiTable = require("ascii-table");
+
+const table = new AsciiTable();
+table.setHeading("Events", "Loaded").setBorder("║", "=", ".");
+
+export function handler(client) {
+  fs.readdirSync("./util/events/").filter((file) => file.endsWith(".js"))
+    .forEach((event) => {
+      try {
+        require(`../util/events/${event}`);
+        table.addRow(event, "✅");
+      } catch (e) {
+        table.addRow(event, "❌");
+      }
+    });
+  console.log(chalk.cyan(table.toString()));
+}
