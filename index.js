@@ -14,7 +14,16 @@ const {
 // requires a mandatory visit to documentation (that of which is not linked
 // here). Consider reworking this so that it becomes painfully obvious what is
 // happening here.
-require("dotenv").config();
+// SOLUTION
+// When able, be as explicit as possible. Adding the file path here might seem
+// redundant, but this line becomes much more obvious if you do.
+
+// https://www.npmjs.com/package/dotenv
+// Pull secret keys and private tokens from a file named ".env".
+// DANGER: Do NOT `git add` or `git push` this file to the repository (local or
+//         remote). The file name has been included in the ".gitignore" file
+//         to keep you from doing so. Do not share your secret key/tokens.
+require("dotenv").config({ path: "./.env" });
 
 // Imports: Local
 const config = require("./config.json");
