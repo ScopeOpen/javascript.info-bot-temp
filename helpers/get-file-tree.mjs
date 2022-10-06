@@ -51,7 +51,7 @@ export function getFileTree(directory_path /*string*/) {
 
 // Tests
 // https://jasmine.github.io/index.html
-if (globalThis['describe']) {
+if (globalThis["describe"]) {
   describe("readJSONFromFile", function () {
     it("reads the json file and returns the contents as string", function () {
       const entries = getFileTree("test-directory");

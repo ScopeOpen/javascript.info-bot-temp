@@ -7,11 +7,11 @@ export function readJSONFromFile(path) {
 
 // Tests
 // https://jasmine.github.io/index.html
-if (globalThis['describe']) {
+if (globalThis["describe"]) {
   describe("readJSONFromFile", function () {
     it("reads the json file and returns the contents as string", function () {
-      const contents = readJSONFromFile('./test-directory/test-file.json')
-      expect(contents.hello).toBe('world!');
+      const contents = readJSONFromFile("./test-directory/test-file.json");
+      expect(contents.hello).toBe("world!");
     });
   });
 }
