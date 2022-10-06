@@ -24,7 +24,14 @@ client.on("messageCreate", async (message) => {
     // Check is user has permissions
     if(cmd.USERPERMS && cmd.USERPERMS?.length > 0) {
         if(!message.channel.permissionsFor(message.member).has(cmd.USERPERMS)){
-            
+            return message.reply({ content: config.Configuration.Messages.INVALIDUSERPERMS.replace('<perms>', cmd.USERPERMS) })
+        }
+    }
+
+    // Check if bot has permissions
+    if(cmd.BOTPERMS && cmd.BOTPERMS?.length > 0) {
+        if(!message.channel.permissionsFor(message.guild.members.me).has(cmd.BOTPERMS)){
+            return message.reply({ content: config.Configuration.Messages.INVALIDBOTPERMS.replace('<perms>', cmd.BOTPERMS) })
         }
     }
 });
