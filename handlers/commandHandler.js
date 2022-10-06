@@ -12,13 +12,14 @@ module.exports = (client) => {
 				files.forEach((file) => {
 						let command = require(`../commands/${dir}/${file}`)
 						if(command) {
-								client.commands.set(command.name, command)
-								if(command.aliases && Array.isArray(command.aliases)) {
-										command.aliases.forEach(alias => {
-												client.aliases.set(alias, command.name)
+								client.commands.set(command.NAME, command);
+								client.all.set(command)
+								if(command.ALIASES && Array.isArray(command.ALIASES)) {
+										command.ALIASES.forEach(alias => {
+												client.aliases.set(alias, command.NAME)
 										})
 								}
-								table.addRow(command.name, '✅')
+								table.addRow(command.NAME, '✅')
 						} else {
 								table.addRow(file, '❌')
 						}

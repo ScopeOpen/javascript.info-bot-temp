@@ -1,13 +1,17 @@
 module.exports = {
-	name: 'ping',
-	description: "Check bot's ping.",
-	cooldown: 3000,
-	userPerms: [],
-	botPerms: ["ATTACH_FILES"],
-    config: {
-        enabled: true
+	NAME: 'ping',
+	DESCRIPTION: 'IDK',
+    CATEGORY: 'FUN',
+	USERPERMS: [],
+	BOTPERMS: [],
+    SETTINGS: {
+        COOLDOWN: 0,
+        ENABLED: true,
+        MINARGS: 0,
+        MAXARGS: 0,
+        ALIASES: [],
     },
-	run: async (client, message, args) => {
+	msgRun: async (client, message, args) => {
 		const msg = await message.reply('Pinging...')
 		await msg.edit(`Pong! **${client.ws.ping} ms**`)
 	}

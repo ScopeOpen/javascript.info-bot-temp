@@ -9,15 +9,17 @@ const Embed = config.Embed
 client.on("messageCreate", async (message) => {
 	const prefix = config.Configuration.Prefix
 	const args = message.content.slice(prefix.length).trim().split(/ +/g);
-	const cmd = args.shift().toLowerCase();
-	const cmdConf = cmd.SETTINGS
+	const command = args.shift().toLowerCase();
+
+    const cmd = client.commands.get(command);
+    const cmdConf = cmd["SETTINGS"]
 
 	if(!message.channel.permissionsFor(message.guild.members.me).has('SendMessages')) return; 
 	if(cmdConf.ENABLED === false) return;
 
 
     // Check if command is ran by owner
-	if(cmd.CATEGORY === "OWNER" && !cmdConf.OWNERIDS.includes(message.author.id)) { 
+	if(cmd.CATEGORY === "OWNER" && !config.Configuration.DevID.includes(message.author.id)) { 
 	    return message.reply({ content: config.Configuration.Messages.OWNERONLY }) 
 	} 
 
@@ -34,11 +36,43 @@ client.on("messageCreate", async (message) => {
             return message.reply({ content: config.Configuration.Messages.INVALIDBOTPERMS.replace('<perms>', cmd.BOTPERMS) })
         }
     }
+
+    // Check if arguments are right
+    if(cmdConf.MINARGS > args.length || cmdConf.MAXARGS < args.length) {
+        const usage = this.getComandUsage(cmd, prefix, command)
+        message.reply({ embeds: [usage] })
+    }
+
+    // Checking for cooldown
+    if(cmd.cooldown > 0) {
+        const remaining = checkRemaning(message.author.id, cmd);
+        if(remaining > 0) {
+            message.reply({ content: config.Configuration.Messages.COOLDOWN })
+        }
+    }
+
+    // Running command
+    try {
+        await cmd.msgRun(client, message, args)
+    } catch(e) {
+        message.reply({ content: config.Configuration.Messages.FAILEDCMD })
+    } finally {
+        if (cmd.cooldown > 0) applyCooldown(message.author.id, cmd);
+    }
 });
 
 module.exports = {
-	getComandUsage() {
+	getComandUsage(cmd, prefix, command, emTitle="Usage") {
+        let desc = `Command: \`${prefix}${cmd.NAME || command}\`: \n Aliases: \`<aliases>\` \n Usage: \`${cmd.USAGE}\` \n Category: \`${cmd.CATEGORY}\` \n Cooldown: \`${cmd.SETTINGS.COOLDOWN}\``
+        
+        if(cmd.SETTINGS.ALIASES.length >= 1) { desc.replace('<aliases>', cmd.SETTINGS.ALIASES.join(', '))}
+        if(cmd.SETTINGS.ALIASES.length == 0) { desc.replace('<aliases>', 'NONE') }
 
+        const embed = new EmbedBuilder()
+            .setColor(config.Configuration.Embed.COLOR)
+            .setDescription(desc)
+            .setTitle(emTitle);
+        return embed;
 	}
 
 };
@@ -61,55 +95,3 @@ function checkRemaning(memberid, cmd) {
 	return;
 }
 
-/*
-	if (message.content.bot) return;
-  	if (message.channel.type !== 0) return;
-  	if (!message.content.startsWith(prefix)) return;
-	const args = message.content.slice(prefix.length).trim().split(/ +/g);
-	const cmd = args.shift().toLowerCase();
-  	let command = client.commands.get(cmd);
-  	if (!command) command = client.commands.get(client.aliases.get(cmd));
-
-
-  	if (command) {
-		function embeds() {
-			command.botPerms.forEach((element) => {
-				if(!message.member.permissions.has.element) {
-					const USERPERMS = new EmbedBuilder()
-					.setDescription(`You don't have \`${command.userPerms}\` permissions to use this command!`)
-					.setColor('Red')
-					return message.reply({ embeds: [USERPERMS] })
-				}
-				if(!message.guild.members.cache.get(client.user.id).permissions.has.element) {
-					const BOTPERMS = new EmbedBuilder()
-					.setDescription(`I don't have \`${command.botPerms}\` permissions to use this command!`)
-					.setColor('Red')
-					return message.reply({ embeds: [BOTPERMS] })
-				}
-			})
-		}
-    		if (command.cooldown) {
-      		if (cooldown.has(`${command.name}-${message.author.id}`)) { message.channel.send({ content: config.Configuration.Messages.COOLDOWN.replace( "<duration>", ms( cooldown.get(`${command.name}-${message.author.id}`) - Date.now(), { long: true } ) ), }); return; }
-      
-			if (command.USERPERMS || command.BOTPERMS) {
-      			if (cooldown.has(`${command.name}-${message.author.id}`)) {
-					embeds()
-      			}
-      		}
-
-			command.run(client, message, args)
-			cooldown.set(`${command.name}-${message.author.id}`, Date.now() + command.cooldown)
-			setTimeout(() => {
-				cooldown.delete(`${command.name}-${message.author.id}`)
-			}, command.cooldown);
-    		} else {
-			if(command.userPerms || command.botPerms) {
-				embeds()
-			}
-			command.run(client, message, args)
-		}
-
-		
-		
-  	}
-*/

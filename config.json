@@ -1,8 +1,4 @@
 {
-    "Authorization": {
-        "Token": "",
-        "Mongoose": ""
-    },
     "Configuration": {
         "Prefix": ".",
         "DevID": [
@@ -13,7 +9,8 @@
             "STARTUP": "Bot is up and running.",
             "OWNERONLY": "Sorry this command is only for owners",
             "INVALIDUSERPERMS": "You do not have the required perms: <perms>",
-            "INVALIDBOTPERMS": "I do not have the required perms: <perms>"
+            "INVALIDBOTPERMS": "I do not have the required perms: <perms>",
+            "FAILEDCMD": "Sorry there was an issue while running your command"
         },
         "Embed": {
             "COLOR": "#fffff"
